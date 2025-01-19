@@ -1,25 +1,51 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Response
+from fastapi.templating import Jinja2Templates
+
 from sqlalchemy.orm import Session
+
 from db.connection import get_db
 from views import user_view
+from schemas.user_schema import *
+
+from core.config import settings
+from datetime import datetime, timedelta, timezone
 
 user = APIRouter(
     prefix="/user"
 )
 
+templates = Jinja2Templates(directory="/home/user/study/chzzk-fastapi/templates")
 
 # 사용자 생성을 위한 API
-@user.post("/")
-async def create_user(request: Request, db: Session = Depends(get_db)):
-    user_data = await request.json()
+@user.post("/register")
+async def create_user(user_register: UserRegister, db: Session = Depends(get_db)):
+    return user_view.post_user_register(user_data = user_register, db=db)    
 
-    res = user_view.create_user(user_data=user_data, db=db)
-    return res
-    
+@user.post('/login')
+async def login(user_login: UserLogin, response:Response, db: Session = Depends(get_db)):
+    res = user_view.post_user_login(user_data = user_login, db=db)
 
-# 사용자 조회를 위한 API
-@user.get("/{user_id}")
-def get_user(user_id: int, db: Session = Depends(get_db)):
-    res = user_view.get_user_by_id(user_id=user_id, db=db)
+    if res['status_code'] != 200:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="일치하는 사용자가 존재하지 않습니다")
+    response.set_cookie(
+        key="access_token",
+        value=res['token'],
+        httponly=True,
+        expires=datetime.now(timezone.utc) + timedelta(minutes=int(settings.ACCESS_TOKEN_EXPIRE_MINUTES)),  # 만료 시간
+    )
+
     return res
+
+@user.get('/login')
+async def login(request: Request):
+    return templates.TemplateResponse('login.html', {'request':request})
+
+@user.get('/register')
+async def register(request:Request):
+    return templates.TemplateResponse('register.html', {'request':request})
+
+@user.get('/test')
+async def test(request: Request):
+    return request.state.user

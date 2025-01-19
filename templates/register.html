@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>메인페이지</title>
+    </head>
+    <style>
+        .main_container {
+            display:flex;
+            flex-direction: column;
+
+            text-align: center;
+        }
+
+        .auth_container {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <script>
+        function signup() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const pwd = document.getElementById('pwd').value;
+            const pwd_check = document.getElementById('pwd_check').value;
+
+            if (pwd != pwd_check){
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            console.log(username, email, pwd, pwd_check);
+        }
+    </script>
+    <body>
+        <div class="main_container">
+            <h1>Chzzk Chatting Sentiment Cls</h1>
+            <div class="auth_container">
+                <div class="input_container">
+                    <label for="username">닉네임</label>
+                    <input type="text" id="username">
+                </div>
+                <div class="input_container">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="input_container">
+                    <label for="pwd">비밀번호</label>
+                    <input type="password" name="" id="pwd">
+                </div>
+                <div class="input_container">
+                    <label for="pwd_check">비밀번호 확인</label>
+                    <input type="password" name="" id="pwd_check">
+                </div>
+                <div class="submit_container">
+                    <button type="button" onclick="signup()">회원가입</button>
+                    <button type="button">메인으로</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>메인페이지</title>
+    </head>
+    <style>
+        .main_container {
+            display:flex;
+            flex-direction: column;
+
+            text-align: center;
+        }
+    </style>
+    <body>
+        <div class="main_container">
+            <h1>Chzzk Chatting Sentiment Cls</h1>
+            <div class="auth_container">
+                <a href="/user/login">로그인</a>
+                <a href="/user/register">회원가입</a>
+            </div>
+            <div class="content_container">
+                <div class="top20_host_container">
+                    top20 방송 리스트 표기
+                </div>
+                <div class="chat_container">
+                    웹소켓 연결 채팅 뜨기
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

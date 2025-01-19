@@ -13,5 +13,8 @@ class Settings:
 
     DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"
 
+    SECRETKEY: str = os.getenv("SECRETKEY")
+    ALGORITHM = os.getenv("ALGORITHM")
+    ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 settings = Settings()
