@@ -23,11 +23,20 @@ class Top():
             'size':20,
             'sortType':'POPULAR'
         }
-        self.session = requests.session()
         self.getTop()
         
     def getTop(self):
-        tops = self.session.get(url=self.getAPIURL, headers=self.headers, params=self.params).json()['content']['data']
+        tops = requests.get(url=self.getAPIURL, headers=self.headers, params=self.params).json()['content']['data']
         for top in tops:
             channel = top['channel']
             self.bjid_list[channel['channelName']] = channel['channelId']
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return list(self.bjid_list.keys())[index]
+        return list(self.bjid_list.keys())[index]
+
+top = Top()
+
+def get_chzzk_top20_list():
+    return top[:]
