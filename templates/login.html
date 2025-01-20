@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>메인페이지</title>
+        <link rel="shortcut icon" href="#">
     </head>
     <script>
         async function login(){
@@ -31,7 +32,12 @@
 
                 // 응답 처리
                 const responseData = await response.json();
-                console.log('Server response:', responseData);
+                if (responseData['status_code'] == 200){
+                    location.href = '/'
+                }else{
+                    alert(responseData['detail'])
+                }
+
             } catch (error) {
                 console.error('Error:', error);
             }

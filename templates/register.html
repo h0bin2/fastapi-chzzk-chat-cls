@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>메인페이지</title>
+        <link rel="shortcut icon" href="#">
     </head>
     <style>
         .main_container {
@@ -18,7 +19,7 @@
         }
     </style>
     <script>
-        function signup() {
+        async function signup() {
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const pwd = document.getElementById('pwd').value;
@@ -29,7 +30,23 @@
                 return;
             }
 
-            console.log(username, email, pwd, pwd_check);
+            const data = {
+                'username':username,
+                'email':email,
+                'password':pwd
+            }
+
+            try {
+                const response = fetch('https://8000-idx-study-1717828617007.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev/user/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // JSON 형식으로 보내기
+                    },
+                    body: JSON.stringify(data)  // 객체를 JSON 문자열로 변환하여 보내기
+                });
+            } catch (error) {
+                alert('실패')
+            }
         }
     </script>
     <body>

@@ -1,5 +1,6 @@
 from typing import Optional
 from fastapi import APIRouter, Depends, Request, Response
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from sqlalchemy.orm import Session
@@ -20,7 +21,13 @@ templates = Jinja2Templates(directory="/home/user/study/chzzk-fastapi/templates"
 # 사용자 생성을 위한 API
 @user.post("/register")
 async def create_user(user_register: UserRegister, db: Session = Depends(get_db)):
-    return user_view.post_user_register(user_data = user_register, db=db)    
+    res = user_view.post_user_register(user_data = user_register, db=db)  
+
+    if res['status_code'] != 200:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="회원가입 에러")  
+
+    return RedirectResponse(url='/login')
 
 @user.post('/login')
 async def login(user_login: UserLogin, response:Response, db: Session = Depends(get_db)):

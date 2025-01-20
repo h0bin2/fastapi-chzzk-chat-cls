@@ -42,7 +42,7 @@ def post_user_login(user_data: User, db: Session):
     if db_user is None or not verify_password(user_data.password, db_user.password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
-    access_token = create_access_token(data={"email": db_user.email})
+    access_token = create_access_token(data={"email": db_user.email, 'username':db_user.username})
     
     return {
         "status_code": status.HTTP_200_OK,
