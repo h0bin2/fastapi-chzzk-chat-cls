@@ -1,42 +1,19 @@
-import requests
-import json
-import asyncio
-import websockets
-import pandas as pd
-
-from fake_useragent import UserAgent
-import ssl
-
-from datetime import datetime
-from pytz import timezone
-
-class Top():
-    def __init__(self):
-        ssl._create_default_https_context = ssl._create_unverified_context
-
-        user_agent = UserAgent()
-        self.headers = {'User-Agent': user_agent.random} #requests 로 get 요청 때 user-Agent 오류 떠서 해결하기 위함. 
-
-        self.bjid_list = {} #csv로 만들기 위한 보관함 딕셔너리
-        self.getAPIURL = "https://api.chzzk.naver.com/service/v1/lives" #현재 방송중인 방송국 중 가장 인기 있는 방송국 20개 출력 api
-        self.params = {
-            'size':20,
-            'sortType':'POPULAR'
-        }
-        self.getTop()
-        
-    def getTop(self):
-        tops = requests.get(url=self.getAPIURL, headers=self.headers, params=self.params).json()['content']['data']
-        for top in tops:
-            channel = top['channel']
-            self.bjid_list[channel['channelName']] = channel['channelId']
-
-    def __getitem__(self, index):
-        if isinstance(index, slice):
-            return list(self.bjid_list.keys())[index]
-        return list(self.bjid_list.keys())[index]
+from core.chzzk import Top
+from fastapi import HTTPException, status
 
 top = Top()
 
 def get_chzzk_top20_list():
-    return top[:]
+    try:
+        return {
+            "status_code": status.HTTP_200_OK,
+            "detail": "Chzzk Top20 방송 불러오기 성공",
+            "data":{
+                'top20':top[:20]
+            }
+        }
+    except:
+        return {
+            "status_code": status.HTTP_400_BAD_REQUEST,
+            "detail": "Chzzk Top20 방송 불러오기 실패"
+        }

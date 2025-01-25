@@ -7,14 +7,17 @@ from starlette.responses import Response
 from datetime import datetime, timedelta, timezone
 
 from routers.user_router import user
+from routers.chzzk_router import chzzk
 
 from core.config import settings
 
 import jwt
+import httpx
 
 def create_app() -> FastAPI:
     _app = FastAPI()
     _app.include_router(user)
+    _app.include_router(chzzk)
 
     return _app
 

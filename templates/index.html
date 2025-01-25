@@ -5,12 +5,83 @@
         <title>메인페이지</title>
         <link rel="shortcut icon" href="#">
     </head>
+    {% if user_info != None %}
+    <script>
+
+        async function loadTop20Chzzk(){
+            try {
+                const response = await fetch('https://8000-idx-study-1717828617007.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev/chzzk/top20', {
+                    method : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'  // JSON 형식으로 보내기
+                    }
+                });
+
+                const resjson = await response.json();
+
+                resjson['data']['top20'].forEach(function(value, index){
+                    let top20 = document.querySelector('.top20_host_container');
+                    top20.innerHTML += `<li onclick='loadChat("${value[1]}", "${value[0]}");'>${value[0]}</li>`; 
+                });
+            } catch(error) {
+                console.log("Top 20 불러오기 에러");
+            }
+        }
+
+        function loadChat(bjid, channelName){
+            //채팅 내역 종료
+
+
+            const socket = "wss://8000-idx-study-1717828617007.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev/chzzk/ws/" + bjid;
+            const ws = new WebSocket(socket);
+            ws.onmessage = function(event){
+                var messages = document.getElementById('chat_container')
+                var message = document.createElement('li')
+
+                const text = channelName + "방송에서 " + event.data 
+
+                const content = document.createTextNode(text)
+                message.appendChild(content)
+                messages.appendChild(message)
+                
+                messages.scrollTop = messages.scrollHeight;
+                
+            }
+        }
+        loadTop20Chzzk()
+
+    </script>
+    {% endif %}
     <style>
         .main_container {
             display:flex;
             flex-direction: column;
 
             text-align: center;
+        }
+
+        .top20_host_container {
+            display:flex;
+            text-align: center;
+
+            justify-content: center;
+            width:80%;
+            margin: auto;
+        }
+
+        .top20_host_container > li {
+            list-style-type: none;
+            margin:auto;
+
+            border: 1px solid gray;
+        }
+
+        #chat_container {
+            display:flex;
+            flex-direction: column;
+
+            height:600px;
+            overflow-y: scroll;
         }
     </style>
     <body>
@@ -25,12 +96,12 @@
                 </div>
             {% elif user_info != None %}
                 <p>{{user_info['username']}}님 반갑습니다.</p>
+                <p>방송국 이름 클릭 시 채팅이 연결됩니다.</p>
                 <div class="content_container">
                     <div class="top20_host_container">
-                        top20 방송 리스트 표기
                     </div>
-                    <div class="chat_container">
-                        웹소켓 연결 채팅 뜨기
+                    <div id="chat_container">
+
                     </div>
                 </div>
             {% endif %}
