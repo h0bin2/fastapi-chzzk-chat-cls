@@ -15,7 +15,7 @@ class Top():
         ssl._create_default_https_context = ssl._create_unverified_context
 
         user_agent = UserAgent()
-        self.headers = {'User-Agent': user_agent.random} #requests 로 get 요청 때 user-Agent 오류 떠서 해결하기 위함. 
+        self.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'} #requests 로 get 요청 때 user-Agent 오류 떠서 해결하기 위함.
 
         self.bjid_list = {} #csv로 만들기 위한 보관함 딕셔너리
         self.getAPIURL = "https://api.chzzk.naver.com/service/v1/lives" #현재 방송중인 방송국 중 가장 인기 있는 방송국 20개 출력 api

@@ -23,7 +23,7 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-templates = Jinja2Templates(directory="/home/user/study/chzzk-fastapi/templates")
+templates = Jinja2Templates(directory="./templates")
 
 def verify_access_token(token: str) -> dict:
     payload = jwt.decode(token, settings.SECRETKEY, algorithms=[settings.ALGORITHM])

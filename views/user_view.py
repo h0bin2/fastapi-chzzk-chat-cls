@@ -18,11 +18,12 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=int(settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-    
+
+    print(to_encode, settings.SECRETKEY, settings.ALGORITHM)
     try:
         encoded_jwt = jwt.encode(to_encode, settings.SECRETKEY, algorithm=settings.ALGORITHM)
-    except:
-        raise ValueError(f'jwt error')
+    except Exception as e:
+        raise ValueError(f'jwt error ' , e)
 
     return encoded_jwt
 

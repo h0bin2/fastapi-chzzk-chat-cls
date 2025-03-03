@@ -16,7 +16,7 @@ user = APIRouter(
     prefix="/user"
 )
 
-templates = Jinja2Templates(directory="/home/user/study/chzzk-fastapi/templates")
+templates = Jinja2Templates(directory="./templates")
 
 # 사용자 생성을 위한 API
 @user.post("/register")

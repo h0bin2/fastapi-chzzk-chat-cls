@@ -10,7 +10,7 @@
 
         async function loadTop20Chzzk(){
             try {
-                const response = await fetch('https://8000-idx-study-1717828617007.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev/chzzk/top20', {
+                const response = await fetch('http://localhost:8000/chzzk/top20', {
                     method : 'GET',
                     headers: {
                         'Content-Type': 'application/json'  // JSON 형식으로 보내기
@@ -32,7 +32,7 @@
             //채팅 내역 종료
 
 
-            const socket = "wss://8000-idx-study-1717828617007.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev/chzzk/ws/" + bjid;
+            const socket = "ws://localhost:8000/chzzk/ws/" + bjid;
             const ws = new WebSocket(socket);
             ws.onmessage = function(event){
                 var messages = document.getElementById('chat_container')
