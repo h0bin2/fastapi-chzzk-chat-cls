@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 
 from starlette.responses import Response
 from datetime import datetime, timedelta, timezone
@@ -16,6 +17,21 @@ import httpx
 
 def create_app() -> FastAPI:
     _app = FastAPI()
+
+    origin = [
+        'http://localhost:8000',
+        'http://localhost:8080',
+        'http://127.0.0.1:8000'
+    ]
+
+    _app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origin,
+        allow_credentials=True,
+        allow_methods=["*"],  # 또는 ["GET", "POST", "PUT", "DELETE"]
+        allow_headers=["*"],
+    )
+
     _app.include_router(user)
     _app.include_router(chzzk)
 
